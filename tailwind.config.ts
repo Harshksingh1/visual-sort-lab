@@ -26,7 +26,9 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					dark: 'hsl(var(--primary-dark))',
+					light: 'hsl(var(--primary-light))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -44,14 +46,24 @@ export default {
 					DEFAULT: 'hsl(var(--accent))',
 					foreground: 'hsl(var(--accent-foreground))'
 				},
-				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))'
-				},
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Algorithm visualization colors
+				comparing: {
+					DEFAULT: 'hsl(var(--comparing))',
+					foreground: 'hsl(var(--comparing-foreground))'
+				},
+				swapping: {
+					DEFAULT: 'hsl(var(--swapping))',
+					foreground: 'hsl(var(--swapping-foreground))'
+				},
+				sorted: {
+					DEFAULT: 'hsl(var(--sorted))',
+					foreground: 'hsl(var(--sorted-foreground))'
+				},
+				'default-bar': 'hsl(var(--default-bar))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
