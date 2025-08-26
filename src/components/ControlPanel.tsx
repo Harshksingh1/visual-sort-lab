@@ -15,7 +15,12 @@ interface ControlPanelProps {
   selectedAlgorithm: SortingAlgorithm;
   onAlgorithmChange: (algorithm: SortingAlgorithm) => void;
   playbackState: PlaybackState;
-  onPlaybackStateChange: (state: PlaybackState) => void;
+  onPlay: () => void;
+  onPause: () => void;
+  onReset: () => void;
+  onStepForward: () => void;
+  onStepBackward: () => void;
+  onSkipToEnd: () => void;
   arraySize: number;
   onArraySizeChange: (size: number) => void;
   speed: number;
@@ -24,6 +29,7 @@ interface ControlPanelProps {
   onCustomArray: (values: number[]) => void;
   currentStep: number;
   totalSteps: number;
+  currentStepDescription?: string;
 }
 
 const algorithms: { value: SortingAlgorithm; label: string }[] = [
@@ -40,7 +46,12 @@ export const ControlPanel = ({
   selectedAlgorithm,
   onAlgorithmChange,
   playbackState,
-  onPlaybackStateChange,
+  onPlay,
+  onPause,
+  onReset,
+  onStepForward,
+  onStepBackward,
+  onSkipToEnd,
   arraySize,
   onArraySizeChange,
   speed,
@@ -49,6 +60,7 @@ export const ControlPanel = ({
   onCustomArray,
   currentStep,
   totalSteps,
+  currentStepDescription,
 }: ControlPanelProps) => {
   const [customInput, setCustomInput] = useState('');
   const [isCustomDialogOpen, setIsCustomDialogOpen] = useState(false);
@@ -56,14 +68,10 @@ export const ControlPanel = ({
 
   const handlePlayPause = () => {
     if (playbackState === 'playing') {
-      onPlaybackStateChange('paused');
+      onPause();
     } else {
-      onPlaybackStateChange('playing');
+      onPlay();
     }
-  };
-
-  const handleStop = () => {
-    onPlaybackStateChange('stopped');
   };
 
   const handleCustomSubmit = () => {
@@ -122,8 +130,9 @@ export const ControlPanel = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => {/* TODO: Step backward */}}
+            onClick={onStepBackward}
             disabled={playbackState === 'playing' || currentStep === 0}
+            title="Step Backward"
           >
             <SkipBack className="h-4 w-4" />
           </Button>
@@ -133,6 +142,7 @@ export const ControlPanel = ({
             size="sm"
             onClick={handlePlayPause}
             className="px-6"
+            title={playbackState === 'playing' ? 'Pause' : 'Play'}
           >
             {playbackState === 'playing' ? (
               <Pause className="h-4 w-4" />
@@ -144,8 +154,9 @@ export const ControlPanel = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={handleStop}
-            disabled={playbackState === 'stopped'}
+            onClick={onReset}
+            disabled={playbackState === 'stopped' && currentStep === 0}
+            title="Reset"
           >
             <Square className="h-4 w-4" />
           </Button>
@@ -153,16 +164,36 @@ export const ControlPanel = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => {/* TODO: Step forward */}}
-            disabled={playbackState === 'playing' || currentStep === totalSteps}
+            onClick={onStepForward}
+            disabled={playbackState === 'playing' || currentStep >= totalSteps - 1}
+            title="Step Forward"
           >
             <SkipForward className="h-4 w-4" />
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onSkipToEnd}
+            disabled={playbackState === 'playing' || currentStep >= totalSteps - 1}
+            title="Skip to End"
+            className="ml-2"
+          >
+            <SkipForward className="h-4 w-4" />
+            <SkipForward className="h-4 w-4 -ml-2" />
           </Button>
         </div>
         
         {totalSteps > 0 && (
-          <div className="text-center text-sm text-muted-foreground">
-            Step {currentStep} of {totalSteps}
+          <div className="text-center space-y-1">
+            <div className="text-sm text-muted-foreground">
+              Step {currentStep + 1} of {totalSteps}
+            </div>
+            {currentStepDescription && (
+              <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
+                {currentStepDescription}
+              </div>
+            )}
           </div>
         )}
       </div>
